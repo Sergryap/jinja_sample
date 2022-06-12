@@ -1,4 +1,4 @@
-from jinja2 import Template
+from jinja2 import Template, Environment, FileSystemLoader, FunctionLoader
 
 # фильтры
 # cars = [
@@ -49,31 +49,54 @@ from jinja2 import Template
 
 # Вложенные макросы
 
-persons = [
-    {'name': 'алексей', 'old': 18, 'weight': 78.5},
-    {'name': 'николай', 'old': 28, 'weight': 82.3},
-    {'name': 'иван', 'old': 33, 'weight': 94.0}
-]
+# persons = [
+#     {'name': 'алексей', 'old': 18, 'weight': 78.5},
+#     {'name': 'николай', 'old': 28, 'weight': 82.3},
+#     {'name': 'иван', 'old': 33, 'weight': 94.0}
+# ]
+#
+# html = """
+# {% macro list_users(list_of_users) -%}
+# <ul>
+# {% for u in list_of_users -%}
+#     <li>{% filter upper %}{{u.name}}{% endfilter %} {{caller(u)}}
+# {%- endfor -%}
+# </ul>
+# {%- endmacro -%}
+#
+# {% call(user) list_users(users) %}
+#     <ul>
+#     <li>age: {{user.old}}
+#     <li>weight: {{user.weight}}
+#     </ul>
+# {% endcall %}
+#
+# """
+#
+# tm = Template(html)
+# msg = tm.render(users=persons)
+#
+# print(msg)
 
-html = """
-{% macro list_users(list_of_users) -%}
-<ul>
-{% for u in list_of_users -%}
-    <li>{% filter upper %}{{u.name}}{% endfilter %} {{caller(u)}}
-{%- endfor -%}
-</ul>
-{%- endmacro -%}
+# include и import
 
-{% call(user) list_users(users) %}
-    <ul>
-    <li>age: {{user.old}}
-    <li>weight: {{user.weight}}
-    </ul>
-{% endcall %}
+# persons = [
+#     {'name': 'алексей', 'old': 18, 'weight': 78.5},
+#     {'name': 'николай', 'old': 28, 'weight': 82.3},
+#     {'name': 'иван', 'old': 33, 'weight': 94.0}
+# ]
+# file_loader = FileSystemLoader("template")
+# env = Environment(loader=file_loader)
+# tm = env.get_template("page.htm")
+# msg = tm.render(domain='https://proproprogs.ru', title="Про Jinja")
+# print(msg)
 
-"""
+# Наследование расширение шаблонов
 
-tm = Template(html)
-msg = tm.render(users=persons)
+subs = ['Математика', 'Физика', 'Информатика', 'Русский']
 
-print(msg)
+file_loader = FileSystemLoader("template")
+env = Environment(loader=file_loader)
+tm = env.get_template("about.htm")
+output = tm.render(list_table=subs)
+print(output)
